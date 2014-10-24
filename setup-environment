@@ -169,39 +169,40 @@ EOF
     generated_config=1
 fi
 
-# Handle EULA setting
-if [ -z "$EULA" ] && ! grep -q '^ACCEPT_FSL_EULA\s*=' conf/local.conf; then
-    EULA='ask'
-fi
-
-if [ "$EULA" = "ask" ]; then
-    cat <<EOF
-
-Some BSPs depend on libraries and packages which are covered by Freescale's
-End User License Agreement (EULA). To have the right to use these binaries in
-your images, you need to read and accept the following...
-
-EOF
-
-    sleep 4
-
-    more -d $CWD/sources/meta-fsl-arm/EULA
-    echo
-    while [ "$EULA" = "ask" ]; do
-        echo -n "Do you accept the EULA you just read? (y/n) "
-        read REPLY
-        case "$REPLY" in
-            y|Y)
-            echo "EULA has been accepted."
-            EULA="1"
-            ;;
-            n|N)
-            echo "EULA has not been accepted."
-            EULA="0"
-            ;;
-        esac
-    done
-fi
+## Handle EULA setting
+#if [ -z "$EULA" ] && ! grep -q '^ACCEPT_FSL_EULA\s*=' conf/local.conf; then
+#    EULA='ask'
+#fi
+#
+#if [ "$EULA" = "ask" ]; then
+#    cat <<EOF
+#
+#Some BSPs depend on libraries and packages which are covered by Freescale's
+#End User License Agreement (EULA). To have the right to use these binaries in
+#your images, you need to read and accept the following...
+#
+#EOF
+#
+#    sleep 4
+#
+#    more -d $CWD/sources/meta-fsl-arm/EULA
+#    echo
+#    while [ "$EULA" = "ask" ]; do
+#        echo -n "Do you accept the EULA you just read? (y/n) "
+#        read REPLY
+#        case "$REPLY" in
+#            y|Y)
+#            echo "EULA has been accepted."
+#            EULA="1"
+#            ;;
+#            n|N)
+#            echo "EULA has not been accepted."
+#            EULA="0"
+#            ;;
+#        esac
+#    done
+#fi
+EULA="1"
 
 if grep -q '^ACCEPT_FSL_EULA\s*=' conf/local.conf; then
     sed -i "s/^#*ACCEPT_FSL_EULA\s*=.*/ACCEPT_FSL_EULA = \"$EULA\"/g" conf/local.conf
@@ -228,6 +229,7 @@ Common targets are:
     meta-toolchain-sdk
     adt-installer
     meta-ide-support
+    controlboard-core-image-minimal
 
 EOF
 
